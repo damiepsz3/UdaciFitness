@@ -73,10 +73,13 @@ export default class AddEntry extends Component {
     //Clear local notification
   }
 
-  //quede aca minuto 2:54 del video de 3.58
 
   reset = () => {
+    const key = timeToString()
 
+    //update Redux
+    //route to home
+    //update db
   }
 
   render() {
@@ -85,11 +88,11 @@ export default class AddEntry extends Component {
       return (
         <View>
           <Ionicons
-            name='ios-happy-ouline'
+            name='ios-happy-outline'
             size={100}
           />
           <Text>You already logged your information for today</Text>
-          <TextButton onPress={}>
+          <TextButton onPress={this.reset}>
             Reset
           </TextButton>
         </View>
