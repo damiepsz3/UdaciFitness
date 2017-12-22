@@ -1,23 +1,28 @@
 import React from 'react'
 import { View, StyleSheet, AsyncStorage } from 'react-native'
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
-import { white, red, orange, blue, lightPurp, pink } from './colors'
+import { red, orange, blue, lightPurp, pink, white } from './colors'
 import { Notifications, Permissions } from 'expo'
 
 const NOTIFICATION_KEY = 'UdaciFitness:notifications'
 
+export function getDailyReminderValue () {
+  return {
+    today: "👋 Don't forget to log your data today!"
+  }
+}
+
 const styles = StyleSheet.create({
   iconContainer: {
     padding: 5,
-    borderRadius:8,
+    borderRadius: 8,
     width: 50,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 20,
-  }
+    marginRight: 20
+  },
 })
-
 
 export function getMetricMetaInfo (metric) {
   const info = {
@@ -118,6 +123,7 @@ export function getMetricMetaInfo (metric) {
     : info[metric]
 }
 
+
 export function isBetween (num, x, y) {
   if (num >= x && num <= y) {
     return true
@@ -160,20 +166,14 @@ export function timeToString (time = Date.now()) {
   return todayUTC.toISOString().split('T')[0]
 }
 
-export function getDailyReminderValue () {
-  return {
-    today: "👋 Don't forget to log your data today!"
-  }
-}
-
-export function clearLocalNotifications () {
+export function clearLocalNotification () {
   return AsyncStorage.removeItem(NOTIFICATION_KEY)
-    .then(Notifications.cancelAllScheduledNotificationsAsync())
+    .then(Notifications.cancelAllScheduledNotificationsAsync)
 }
 
-export function createNotification () {
+function createNotification () {
   return {
-    title: 'Log your stats',
+    title: 'Log your stats!',
     body: "👋 don't forget to log your stats for today!",
     ios: {
       sound: true,
@@ -193,8 +193,8 @@ export function setLocalNotification () {
     .then((data) => {
       if (data === null) {
         Permissions.askAsync(Permissions.NOTIFICATIONS)
-          .then(({status}) => {
-            if(status === 'granted') {
+          .then(({ status }) => {
+            if (status === 'granted') {
               Notifications.cancelAllScheduledNotificationsAsync()
 
               let tomorrow = new Date()
@@ -202,12 +202,11 @@ export function setLocalNotification () {
               tomorrow.setHours(20)
               tomorrow.setMinutes(0)
 
-              Notifications.scheduleLocalNotificationsAsync(
+              Notifications.scheduleLocalNotificationAsync(
                 createNotification(),
                 {
                   time: tomorrow,
                   repeat: 'day',
-
                 }
               )
 
